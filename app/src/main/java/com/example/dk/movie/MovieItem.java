@@ -11,30 +11,31 @@ class MovieItem {
     String actor;
     float userRating;
     Bitmap image;
+    String link;
 
     //생성자
     public MovieItem(String title) {
         this.title = title;
     }
 
-    public MovieItem(String title, String pubDate, String director, String actor, float v) {
+    public MovieItem(String title, String pubDate, String director, String actor, float v, String link) {
         this.title = title;
         this.pubDate = pubDate;
         this.director = director;
         this.actor  = actor;
         this.userRating = userRating;
+        this.link = link;
     }
 
-    public MovieItem(String title, String pubDate, String director, String actor, float userRating, Bitmap image) {
+    public MovieItem(String title, String pubDate, String director, String actor, float userRating, Bitmap image, String link) {
         this.title = title;
         this.pubDate = pubDate;
         this.director = director;
         this.actor  = actor;
         this.userRating = userRating;
         this.image = image;
+        this.link = link;
     }
-
-
 
 
     //getter, setter
@@ -88,6 +89,14 @@ class MovieItem {
 
     public void setImage(Bitmap image) {
         this.image = image;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     @Override

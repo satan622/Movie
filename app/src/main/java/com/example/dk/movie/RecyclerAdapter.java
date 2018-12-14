@@ -23,15 +23,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     //ViewHolder가 초기화 될 때 혹은 ViewHolder를 초기화 할 때 실행되는 메서드
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         //Context를 부모로 부터 받아와서
         Context context = parent.getContext() ;
         //받은 Context를 기반으로 LayoutInflater를 생성
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         //생성된 LayoutInflater로 어떤 Layout을 가져와서 어떻게 View를 그릴지 결정
-        View studentView = layoutInflater.inflate(R.layout.list_item, parent, false);
+        View view = layoutInflater.inflate(R.layout.list_item, parent, false);
         //View 생성 후, 이 View를 관리하기위한 ViewHolder를 생성
-        ViewHolder viewHolder = new ViewHolder(studentView);
+        ViewHolder viewHolder = new ViewHolder(view);
         //생성된 ViewHolder를 OnBindViewHolder로 넘겨줌
         return viewHolder;
     }
@@ -57,6 +57,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
         director.setText(movieItem.getDirector());
         actor.setText(movieItem.getActor());
         userRating.setRating(movieItem.getUserRating());
+
     }
 
     //items에 들어있는 movieItem 개수 counting
@@ -66,6 +67,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 }
 
+
 class ViewHolder extends RecyclerView.ViewHolder {
     public ImageView imageView;
     public TextView title;
@@ -74,7 +76,9 @@ class ViewHolder extends RecyclerView.ViewHolder {
     public TextView actor;
     public RatingBar userRating;
 
-    public ViewHolder(@NonNull View itemView) {
+    public String link;
+
+    public ViewHolder(@NonNull final View itemView) {
         super(itemView);
 
         title = (TextView)itemView.findViewById(R.id.title);
@@ -83,5 +87,8 @@ class ViewHolder extends RecyclerView.ViewHolder {
         actor = (TextView)itemView.findViewById(R.id.actor);
         userRating = (RatingBar)itemView.findViewById(R.id.userRating);
         imageView = (ImageView)itemView.findViewById(R.id.image);
+
+
     }
+
 }
