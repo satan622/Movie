@@ -221,17 +221,22 @@ public class MainActivity extends AppCompatActivity {
                     String link = link_tag.getTextContent();
                     result_link_list.add(link);
 
-                    URL imageUrl = new URL(image);
+                    try {
+                        URL imageUrl = new URL(image);
 
-                    //Web에서 이미지를 가져온 뒤 ImageView에 지정할 Bitmap을 생성
-                    HttpURLConnection urlConn = (HttpURLConnection)imageUrl.openConnection();
-                    urlConn.setDoInput(true); //서버로부터 응답 수신
-                    urlConn.connect();
+                        //Web에서 이미지를 가져온 뒤 ImageView에 지정할 Bitmap을 생성
+                        HttpURLConnection urlConn = (HttpURLConnection)imageUrl.openConnection();
+                        urlConn.setDoInput(true); //서버로부터 응답 수신
+                        urlConn.connect();
 
-                    InputStream imgIs = urlConn.getInputStream();
-                    Bitmap bitmap = BitmapFactory.decodeStream(imgIs);
+                        InputStream imgIs = urlConn.getInputStream();
+                        Bitmap bitmap = BitmapFactory.decodeStream(imgIs);
 
-                    movieAdapter.addItem(new MovieItem(title, pubDate, director, actor, rating/2, bitmap));
+                        movieAdapter.addItem(new MovieItem(title, pubDate, director, actor, rating/2, bitmap));
+                    }catch (Exception e){
+                        System.out.println("이미지URL 에러");
+                        movieAdapter.addItem(new MovieItem(title, pubDate, director, actor, rating/2));
+                    }
                 }
 
                 //리스트뷰를 구성한다.

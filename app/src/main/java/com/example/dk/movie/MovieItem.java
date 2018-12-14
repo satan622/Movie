@@ -17,16 +17,12 @@ class MovieItem {
         this.title = title;
     }
 
-    public MovieItem(String title, String pubDate) {
-        this.title = title;
-        this.pubDate = pubDate;
-    }
-
-    public MovieItem(String title, String pubDate, String director, String actor) {
+    public MovieItem(String title, String pubDate, String director, String actor, float v) {
         this.title = title;
         this.pubDate = pubDate;
         this.director = director;
         this.actor  = actor;
+        this.userRating = userRating;
     }
 
     public MovieItem(String title, String pubDate, String director, String actor, float userRating, Bitmap image) {
@@ -37,6 +33,7 @@ class MovieItem {
         this.userRating = userRating;
         this.image = image;
     }
+
 
 
 
