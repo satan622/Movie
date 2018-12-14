@@ -1,7 +1,10 @@
 package com.example.dk.movie;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
@@ -9,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import java.net.URI;
 import java.util.Date;
 
 class MovieItemView extends LinearLayout {
@@ -43,7 +47,7 @@ class MovieItemView extends LinearLayout {
     }
 
     public void setTitle(String t){
-        title.setText(t);
+        title.setText(Html.fromHtml(t));
     }
     public void setDirector(String d){
         director.setText(d);
@@ -56,6 +60,9 @@ class MovieItemView extends LinearLayout {
     }
     public void setUserRating(float rating){
         userRating.setRating(rating);
+    }
+    public void setImageView(Bitmap bm){
+        imageView.setImageBitmap(bm);
     }
 
 }

@@ -1,9 +1,12 @@
 package com.example.dk.movie;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -111,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
             view.setDirector(item.getDirector());
             view.setActor(item.getActor());
             view.setUserRating(item.getUserRating());
+            view.setImageView(item.getImage());
 
             return view;
         }
@@ -190,12 +194,14 @@ public class MainActivity extends AppCompatActivity {
                     //i번째 태그 객체를 가져온다.
                     Element item_tag = (Element)item_list.item(i);
 
+
                     // item 태그 내의 title 과 link 를 가져온다.
                     NodeList title_list = item_tag.getElementsByTagName("title");
                     NodeList date_list = item_tag.getElementsByTagName("pubDate");
                     NodeList director_list = item_tag.getElementsByTagName("director");
                     NodeList actor_list = item_tag.getElementsByTagName("actor");
                     NodeList rating_list = item_tag.getElementsByTagName("userRating");
+                    NodeList image_list = item_tag.getElementsByTagName("image");
                     NodeList link_list = item_tag.getElementsByTagName("link");
 
                     Element title_tag = (Element)title_list.item(0);
@@ -203,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
                     Element director_tag = (Element)director_list.item(0);
                     Element actor_tag = (Element)actor_list.item(0);
                     Element rating_tag = (Element)rating_list.item(0);
+                    Element image_tag = (Element)image_list.item(0);
                     Element link_tag = (Element)link_list.item(0);
 
                     String title = title_tag.getTextContent();
@@ -210,10 +217,21 @@ public class MainActivity extends AppCompatActivity {
                     String director = director_tag.getTextContent();
                     String actor = actor_tag.getTextContent();
                     float rating = Float.parseFloat(rating_tag.getTextContent());
+                    String image = image_tag.getTextContent();
                     String link = link_tag.getTextContent();
                     result_link_list.add(link);
 
-                    movieAdapter.addItem(new MovieItem(title, pubDate, director, actor, rating/2));
+                    URL imageUrl = new URL(image);
+
+                    //Web에서 이미지를 가져온 뒤 ImageView에 지정할 Bitmap을 생성
+                    HttpURLConnection urlConn = (HttpURLConnection)imageUrl.openConnection();
+                    urlConn.setDoInput(true); //서버로부터 응답 수신
+                    urlConn.connect();
+
+                    InputStream imgIs = urlConn.getInputStream();
+                    Bitmap bitmap = BitmapFactory.decodeStream(imgIs);
+
+                    movieAdapter.addItem(new MovieItem(title, pubDate, director, actor, rating/2, bitmap));
                 }
 
                 //리스트뷰를 구성한다.

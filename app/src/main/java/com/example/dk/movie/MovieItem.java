@@ -1,5 +1,7 @@
 package com.example.dk.movie;
 
+import android.graphics.Bitmap;
+
 import java.util.Date;
 
 class MovieItem {
@@ -8,7 +10,7 @@ class MovieItem {
     String director;
     String actor;
     float userRating;
-    String image;
+    Bitmap image;
 
     //생성자
     public MovieItem(String title) {
@@ -27,12 +29,13 @@ class MovieItem {
         this.actor  = actor;
     }
 
-    public MovieItem(String title, String pubDate, String director, String actor, float userRating) {
+    public MovieItem(String title, String pubDate, String director, String actor, float userRating, Bitmap image) {
         this.title = title;
         this.pubDate = pubDate;
         this.director = director;
         this.actor  = actor;
         this.userRating = userRating;
+        this.image = image;
     }
 
 
@@ -78,11 +81,15 @@ class MovieItem {
         this.userRating = userRating;
     }
 
-    public String getImage() {
+    public void setUserRating(float userRating) {
+        this.userRating = userRating;
+    }
+
+    public Bitmap getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(Bitmap image) {
         this.image = image;
     }
 
