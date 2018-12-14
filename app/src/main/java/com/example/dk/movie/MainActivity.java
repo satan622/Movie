@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,23 +41,33 @@ public class MainActivity extends AppCompatActivity {
     //link 결과를 담을 ArrayList
     ArrayList<String> result_link_list;
 
-    MovieAdapter movieAdapter;
+//    MovieAdapter movieAdapter;
 
+
+    //RecyclerView
+    RecyclerView recyclerView;
+    RecyclerAdapter recyclerAdapter;
+    ArrayList<MovieItem> items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        list = findViewById(R.id.list); //리스트 뷰 연결
+//        list = findViewById(R.id.list); //리스트 뷰 연결
+        recyclerView = (RecyclerView)findViewById(R.id.list);
+        items = new ArrayList<>();
+
 
         //결과 link ArrayList 객체 생성
         result_link_list = new ArrayList<>();
 
-        list.setAdapter(movieAdapter); //어답터 설정
 
-        ResultListListener listListener = new ResultListListener(); //검색 결과 리스트 뷰의 항목을 터치하면 반응하는 리스너
-        list.setOnItemClickListener(listListener); //아이템 클릭 리스너 설정
+//        list.setAdapter(movieAdapter); //어답터 설정
+        recyclerView.setAdapter(recyclerAdapter);
+
+//        ResultListListener listListener = new ResultListListener(); //검색 결과 리스트 뷰의 항목을 터치하면 반응하는 리스너
+//        list.setOnItemClickListener(listListener); //아이템 클릭 리스너 설정
 
 
         editText = (EditText)findViewById(R.id.editText);
@@ -75,50 +87,50 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    class MovieAdapter extends BaseAdapter{
-        ArrayList<MovieItem> items = new ArrayList<>();
-
-        //파라미터로 받은 아이템을 어댑터에 추가
-        public void addItem(MovieItem item){
-            items.add(item);
-        }
-
-        @Override
-        public int getCount() {
-            return items.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return items.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            MovieItemView view = null;
-            if(convertView == null){
-               view = new MovieItemView(getApplicationContext());
-            }else{
-                view = (MovieItemView)convertView;
-            }
-
-            MovieItem item = items.get(position);
-            view.setTitle(item.getTitle());
-            view.setPubDate(item.getPubDate());
-            view.setDirector(item.getDirector());
-            view.setActor(item.getActor());
-            view.setUserRating(item.getUserRating());
-            view.setImageView(item.getImage());
-
-            return view;
-        }
-    }
+//    class MovieAdapter extends BaseAdapter{
+//        ArrayList<MovieItem> items = new ArrayList<>();
+//
+//        //파라미터로 받은 아이템을 어댑터에 추가
+//        public void addItem(MovieItem item){
+//            items.add(item);
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return items.size();
+//        }
+//
+//        @Override
+//        public Object getItem(int position) {
+//            return items.get(position);
+//        }
+//
+//        @Override
+//        public long getItemId(int position) {
+//            return position;
+//        }
+//
+//        @Override
+//        public View getView(int position, View convertView, ViewGroup parent) {
+//
+//            MovieItemView view = null;
+//            if(convertView == null){
+//               view = new MovieItemView(getApplicationContext());
+//            }else{
+//                view = (MovieItemView)convertView;
+//            }
+//
+//            MovieItem item = items.get(position);
+//            view.setTitle(item.getTitle());
+//            view.setPubDate(item.getPubDate());
+//            view.setDirector(item.getDirector());
+//            view.setActor(item.getActor());
+//            view.setUserRating(item.getUserRating());
+//            view.setImageView(item.getImage());
+//
+//            return view;
+//        }
+//    }
 
 
 
@@ -187,7 +199,8 @@ public class MainActivity extends AppCompatActivity {
                 NodeList item_list = root.getElementsByTagName("item");
 
 
-                movieAdapter  = new MovieAdapter();
+//                movieAdapter  = new MovieAdapter();
+                recyclerAdapter = new RecyclerAdapter(items);
 
                 //태그 개수만큼 반복
                 for(int i=0; i<item_list.getLength(); i++){
@@ -232,10 +245,14 @@ public class MainActivity extends AppCompatActivity {
                         InputStream imgIs = urlConn.getInputStream();
                         Bitmap bitmap = BitmapFactory.decodeStream(imgIs);
 
-                        movieAdapter.addItem(new MovieItem(title, pubDate, director, actor, rating/2, bitmap));
+//                        movieAdapter.addItem(new MovieItem(title, pubDate, director, actor, rating/2, bitmap));
+
+                        items.add(new MovieItem(title, pubDate, director, actor, rating/2, bitmap));
+
                     }catch (Exception e){
                         System.out.println("이미지URL 에러");
-                        movieAdapter.addItem(new MovieItem(title, pubDate, director, actor, rating/2));
+//                        movieAdapter.addItem(new MovieItem(title, pubDate, director, actor, rating/2));
+                        items.add(new MovieItem(title, pubDate, director, actor, rating/2));
                     }
                 }
 
@@ -244,8 +261,11 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 //                      ArrayAdapter<String> adapter = (ArrayAdapter<String>)list.getAdapter();
-                        list.setAdapter(movieAdapter);
-                        movieAdapter.notifyDataSetChanged();
+//                        list.setAdapter(movieAdapter);
+//                        movieAdapter.notifyDataSetChanged();
+                        recyclerView.setAdapter(recyclerAdapter);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                        recyclerAdapter.notifyDataSetChanged();
                     }
                 });
 
