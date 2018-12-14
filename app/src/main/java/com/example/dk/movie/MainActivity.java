@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -50,8 +52,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        list = findViewById(R.id.list); //리스트 뷰 연결
+        
         recyclerView = (RecyclerView)findViewById(R.id.list);
 
         //MovieItem을 담을 결과 ArrayList 생성
@@ -144,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
             try{
                 items.clear(); //검색할 때 마다 검색 결과 초기화
 
+
                 //검색어 인코딩
                 keyword = URLEncoder.encode(keyword, "UTF-8");
                 //접속 주소
@@ -171,8 +173,6 @@ public class MainActivity extends AppCompatActivity {
                 //item 태그 객체들을 가져온다.
                 NodeList item_list = root.getElementsByTagName("item");
 
-
-//                movieAdapter  = new MovieAdapter();
                 recyclerAdapter = new RecyclerAdapter(items);
 
                 //태그 개수만큼 반복
@@ -220,7 +220,6 @@ public class MainActivity extends AppCompatActivity {
                         items.add(new MovieItem(title, pubDate, director, actor, rating/2, bitmap, link));
 
                     }catch (Exception e){
-                        System.out.println("이미지URL 에러");
                         items.add(new MovieItem(title, pubDate, director, actor, rating/2, link));
                     }
                 }
@@ -236,7 +235,6 @@ public class MainActivity extends AppCompatActivity {
                 });
 
             }catch (Exception e){
-                e.printStackTrace();
             }
         }
     }
