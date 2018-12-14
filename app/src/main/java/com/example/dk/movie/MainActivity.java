@@ -39,18 +39,11 @@ public class MainActivity extends AppCompatActivity {
     //검색어 입력창 참조변수
     EditText editText;
 
-    //뷰의 주소값을 담을 참조변수
-    ListView list;
-
-//    //link 결과를 담을 ArrayList
-//    ArrayList<String> result_link_list;
-
-//    MovieAdapter movieAdapter;
-
-
     //RecyclerView
     RecyclerView recyclerView;
     RecyclerAdapter recyclerAdapter;
+
+    //MovieItem을 담을 결과 리스트
     ArrayList<MovieItem> items;
 
     @Override
@@ -61,20 +54,12 @@ public class MainActivity extends AppCompatActivity {
 //        list = findViewById(R.id.list); //리스트 뷰 연결
         recyclerView = (RecyclerView)findViewById(R.id.list);
 
-//        //결과 link ArrayList 객체 생성
-//        result_link_list = new ArrayList<>();
-
         //MovieItem을 담을 결과 ArrayList 생성
         items = new ArrayList<>();
 
-//        list.setAdapter(movieAdapter); //어답터 설정
-        recyclerView.setAdapter(recyclerAdapter);
+        recyclerView.setAdapter(recyclerAdapter); //어댑터 설정
 
-
-//        ResultListListener listListener = new ResultListListener(); //검색 결과 리스트 뷰의 항목을 터치하면 반응하는 리스너
-//        list.setOnItemClickListener(listListener); //아이템 클릭 리스너 설정
-
-        //누르고 뗄 때 한번만 인식하도록 하기위한 제스처디텍터
+        //터치 이벤트 발생 시 누르고 뗄 때 한번만 인식하도록 하기위한 제스처디텍터
         final GestureDetector gestureDetector = new GestureDetector(getApplicationContext(),new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
@@ -121,11 +106,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
-        recyclerView.addOnItemTouchListener(onItemTouchListener);
 
+        recyclerView.addOnItemTouchListener(onItemTouchListener); //리사이클러뷰에 터치 리스너 등록
+
+        //검색 텍스트 입력 창
         editText = (EditText)findViewById(R.id.editText);
         editText.setHint("검색어 입력");
 
+        //검색 버튼
         Button button = (Button)findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,75 +125,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
-
-//    class MovieAdapter extends BaseAdapter{
-//        ArrayList<MovieItem> items = new ArrayList<>();
-//
-//        //파라미터로 받은 아이템을 어댑터에 추가
-//        public void addItem(MovieItem item){
-//            items.add(item);
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return items.size();
-//        }
-//
-//        @Override
-//        public Object getItem(int position) {
-//            return items.get(position);
-//        }
-//
-//        @Override
-//        public long getItemId(int position) {
-//            return position;
-//        }
-//
-//        @Override
-//        public View getView(int position, View convertView, ViewGroup parent) {
-//
-//            MovieItemView view = null;
-//            if(convertView == null){
-//               view = new MovieItemView(getApplicationContext());
-//            }else{
-//                view = (MovieItemView)convertView;
-//            }
-//
-//            MovieItem item = items.get(position);
-//            view.setTitle(item.getTitle());
-//            view.setPubDate(item.getPubDate());
-//            view.setDirector(item.getDirector());
-//            view.setActor(item.getActor());
-//            view.setUserRating(item.getUserRating());
-//            view.setImageView(item.getImage());
-//
-//            return view;
-//        }
-//    }
-
-
-
-
-
-//    //검색 결과 리스트 뷰의 항목을 터치하면 반응하는 리스너
-//    //OnItemClickListener 인터페이스를 구현한 리스너 클래스 생성
-//    private class ResultListListener implements AdapterView.OnItemClickListener{
-//
-//        @Override
-//        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//            //검색 결과의 position 번째 링크 주소를 가져온다.
-//            String site = result_link_list.get(position);
-//
-//            //사이트를 띄운다.
-//            Uri uri = Uri.parse(site);
-//            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-//            startActivity(intent);
-//
-//        }
-//    }
 
     //데이터를 받아오는 스레드
     private class NetworkThread extends Thread {
@@ -223,8 +142,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             try{
-//                result_link_list.clear();
-                items.clear();
+                items.clear(); //검색할 때 마다 검색 결과 초기화
 
                 //검색어 인코딩
                 keyword = URLEncoder.encode(keyword, "UTF-8");
@@ -262,7 +180,6 @@ public class MainActivity extends AppCompatActivity {
                     //i번째 태그 객체를 가져온다.
                     Element item_tag = (Element)item_list.item(i);
 
-
                     // item 태그 내의 title 과 link 를 가져온다.
                     NodeList title_list = item_tag.getElementsByTagName("title");
                     NodeList date_list = item_tag.getElementsByTagName("pubDate");
@@ -287,8 +204,8 @@ public class MainActivity extends AppCompatActivity {
                     float rating = Float.parseFloat(rating_tag.getTextContent());
                     String image = image_tag.getTextContent();
                     String link = link_tag.getTextContent();
-//                    result_link_list.add(link);
 
+                    //검색결과 항목에 이미지가 있으면 섬네일 등록, 없으면 공백으로 처리
                     try {
                         URL imageUrl = new URL(image);
 
@@ -300,23 +217,18 @@ public class MainActivity extends AppCompatActivity {
                         InputStream imgIs = urlConn.getInputStream();
                         Bitmap bitmap = BitmapFactory.decodeStream(imgIs);
 
-//                        movieAdapter.addItem(new MovieItem(title, pubDate, director, actor, rating/2, bitmap));
                         items.add(new MovieItem(title, pubDate, director, actor, rating/2, bitmap, link));
 
                     }catch (Exception e){
                         System.out.println("이미지URL 에러");
-//                        movieAdapter.addItem(new MovieItem(title, pubDate, director, actor, rating/2));
                         items.add(new MovieItem(title, pubDate, director, actor, rating/2, link));
                     }
                 }
 
-                //리사이클러뷰를 구성한다.
+                //리사이클러뷰를 구성
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-//                      ArrayAdapter<String> adapter = (ArrayAdapter<String>)list.getAdapter();
-//                        list.setAdapter(movieAdapter);
-//                        movieAdapter.notifyDataSetChanged();
                         recyclerView.setAdapter(recyclerAdapter);
                         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
                         recyclerAdapter.notifyDataSetChanged();

@@ -24,14 +24,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
     //ViewHolder가 초기화 될 때 혹은 ViewHolder를 초기화 할 때 실행되는 메서드
     @Override
     public ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-        //Context를 부모로 부터 받아와서
+        //Context를 부모로 부터 받아옴
         Context context = parent.getContext() ;
+
         //받은 Context를 기반으로 LayoutInflater를 생성
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        //생성된 LayoutInflater로 어떤 Layout을 가져와서 어떻게 View를 그릴지 결정
+
+        //LayoutInflater로 어떤 Layout을 가져와서 어떻게 View를 그릴지 결정
         View view = layoutInflater.inflate(R.layout.list_item, parent, false);
-        //View 생성 후, 이 View를 관리하기위한 ViewHolder를 생성
+
+        //View를 관리하기위한 ViewHolder 생성
         ViewHolder viewHolder = new ViewHolder(view);
+
         //생성된 ViewHolder를 OnBindViewHolder로 넘겨줌
         return viewHolder;
     }
