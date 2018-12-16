@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(recyclerAdapter); //어댑터 설정
 
         //터치 이벤트 발생 시 누르고 뗄 때 한번만 인식하도록 하기위한 제스처디텍터
+        //제스처 디텍터로 한번만 인식하는 처리를 하지 않으면 터치시 이벤트가 두번 발생하여 링크 주소를 두개 열게 된다.
         final GestureDetector gestureDetector = new GestureDetector(getApplicationContext(),new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
@@ -149,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                 //검색어 인코딩
                 keyword = URLEncoder.encode(keyword, "UTF-8");
                 //접속 주소
-                String site = "https://openapi.naver.com/v1/search/movie.xml?query=" + keyword;
+                String site = "https://openapi.naver.com/v1/search/movie.xml?query=" + keyword + "&display=20";
 
                 //접속
                 URL url = new URL(site);
